@@ -36,11 +36,11 @@ println("Le score du bingo gagnant est $result")
 
 ##############################
 ## Question 2
-while sum(1 .- flagWins() ) > 1
-    drawNext()
-end
-loserBoard = findfirst( map(!, flagWins()) )
-while !all( flagWins() )
+flagLoss() = map(!, flagWins() )
+loserBoard = 0
+while any( flagLoss() )
+    (sum( flagLoss() ) == 1 ) && 
+        global loserBoard = findfirst( flagLoss()[:] )
     drawNext()
 end
 
