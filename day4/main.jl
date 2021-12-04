@@ -19,7 +19,7 @@ hasWinRow() = any( all(isDrawn, dims=2), dims=1 )[:]
 hasWinCol() = any( all(isDrawn, dims=1), dims=2 )[:]
 flagWins()  = hasWinRow() .| hasWinCol()
 
-drawNext() = popfirst!(nextNb) |> n -> (@. isDrawn |= (cards == n))
+drawNext() = ( isDrawn[cards .== popfirst!(nextNb)] .= true )
 computeScore(idx, lastDrawn) = 
     sum(cards[:,:,idx] .* map(!,isDrawn[:,:,idx]) ) * lastDrawn
 
