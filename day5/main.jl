@@ -17,7 +17,7 @@ end
 
 # Initialise danger matrix, with indices starting at 0
 lastIdx = maximum( CartesianIndex.( vcat(fstIndices,scdIndices) ) )
-dangerRating = OffsetMatrix( zeros(Int, Tuple(lastIdx)), -1, -1)
+dangerRating = OffsetMatrix( zeros(Int, Tuple(lastIdx).+1), -1, -1)
 
 
 ####################################
