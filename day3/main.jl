@@ -27,7 +27,7 @@ function getIndices(comp)
         compBit = comp.(
             sum(bits[iBit, validIndices]) , sum(validIndices)/2 )
         # filtrage des bits invalides
-        @. validIndices &= ( bits[iBit, :] == compBit )
+        @. validIndices[ bits[iBit, :] != compBit ] = false
         iBit += 1
     end
     validIndices
