@@ -2,7 +2,7 @@ using DelimitedFiles
 
 #####################
 ##  Parse data
-concatCards, brokenHeader = readdlm("day4/input.txt", Int, header=true)
+concatCards, brokenHeader = readdlm("day04/input.txt", Int, header=true)
 
 nb = parse.( Int, split(brokenHeader[1], ',') )
 nextNb = Iterators.Stateful(nb)

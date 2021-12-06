@@ -2,7 +2,7 @@ using DelimitedFiles
 using Printf
 
 # Load file
-data = readdlm("day1/input.txt", Int)[:]
+data = readdlm("day01/input.txt", Int)[:]
 
 # Question 1
 hasIncreased = diff(data) .> 0

@@ -1,7 +1,7 @@
 using DelimitedFiles
 
 # Load data
-data = readdlm("day2/input.txt", ' ')
+data = readdlm("day02/input.txt", ' ')
 strDirections = String.( data[:,1] )
 speed = Int.( data[:,2] )
 

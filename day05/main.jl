@@ -6,7 +6,7 @@ function toTuple(vecCoords)
     intMat = parse.( Int, hcat( split.(vecCoords, ',')... ) )
     Tuple.( reverse.( eachcol(intMat) ) )
 end
-data = readdlm("day5/input.txt", String)
+data = readdlm("day05/input.txt", String)
 fstIndices, scdIndices = toTuple(data[:,1]), toTuple(data[:,3])
 
 # Create iterators from index1 to index2 (for each coordinate)

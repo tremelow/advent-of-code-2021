@@ -1,6 +1,6 @@
 using DelimitedFiles
 
-data = readdlm("day3/input.txt", String)[:]
+data = readdlm("day03/input.txt", String)[:]
 bits = ( hcat(split.(data, "")...) .== "1" )
 bitSize, N = size(bits)
 
