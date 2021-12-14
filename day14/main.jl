@@ -2,32 +2,18 @@ flines = readlines("day14/input.txt")
 
 ###########################
 ## Polymer chain
+initChain = split(flines[1], "")
+initPairs = initChain[1:end-1] .* initChain[2:end]
 
-emptyChar = '_'
-mutable struct Node
-    label :: AbstractChar
-    next  :: Node
-    Node() = (x = new(); x.label = emptyChar; x.next = x)
-    Node(label, next) = new(label, next)
+function updateFreq!(pairFreq, pair, incr=1)
+    get!(pairFreq, pair, 0)
+    pairFreq[pair] += incr
 end
 
-function chainToString(chain)
-    curNode, curString = chain, ""
-    while curNode.label != emptyChar
-        curString *= curNode.label
-        curNode = curNode.next
-    end
-    curString
+pairFreq = Dict{String,Int}()
+for pair in initPairs
+    updateFreq!(pairFreq, pair)
 end
-
-function buildChain(formula)
-    chain = Node()
-    for c in reverse(formula)
-        chain = Node(c, chain)
-    end
-    return chain
-end
-chain = buildChain(flines[1])
 
 
 ################################
@@ -38,22 +24,51 @@ rules = Dict(
     for r in split.(flines[3:end], " -> ") 
 )
 
-function updateChain!(curNode)
-    toInsert = get(rules, curNode.label * curNode.next.label, emptyChar)
-    nextNode = curNode.next
-    (toInsert != emptyChar) &&
-        ( curNode.next = Node(toInsert, nextNode) )
-    (curNode.label != emptyChar) &&
-        updateChain!(nextNode)
+function updateAllFreq!(pairFreq)
+    for (pair, freq) in copy(pairFreq)
+        if !isempty( get(rules, pair, "") )
+            toInsert = rules[pair]
+            updateFreq!(pairFreq, pair[1]*toInsert, freq)
+            updateFreq!(pairFreq, toInsert*pair[2], freq)
+            updateFreq!(pairFreq, pair, -freq)
+        end
+    end
+    nothing
 end
 
+function getIndivFreq(pairFreq, lastChar)
+    allChar = unique(prod(keys(pairFreq)))
+    indivFreq = Dict(
+        c => sum( 
+            (pair[1] == c ? freq : 0) 
+            for (pair,freq) in pairFreq 
+        )
+        for c in allChar
+    )
 
-for _ in 1:40
-    updateChain!(chain)
+    get!(indivFreq, lastChar, 0)
+    indivFreq[lastChar] += 1
+
+    indivFreq
 end
 
-strChain = chainToString(chain)
-freqLabel = Dict(a => count(==(a), strChain) for a in unique(strChain) )
+####################################
+## Question 1
+for _ in 1:10
+    updateAllFreq!(pairFreq)
+end
 
-result = maximum(values(freqLabel)) - minimum(values(freqLabel))
-println("La quantité recherchée est $result")
+indivFreq = getIndivFreq(pairFreq, first(initChain[end]))
+result = maximum(values(indivFreq)) - minimum(values(indivFreq))
+println("Après 10 étapes, la quantité demandée vaut $result")
+
+
+####################################
+## Question 2
+for _ in 11:40
+    updateAllFreq!(pairFreq)
+end
+
+indivFreq = getIndivFreq(pairFreq, first(initChain[end]))
+result = maximum(values(indivFreq)) - minimum(values(indivFreq))
+println("Après 40 étapes, la quantité demandée vaut $result")
