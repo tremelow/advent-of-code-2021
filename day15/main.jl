@@ -3,7 +3,7 @@ using Graphs, SimpleWeightedGraphs
 fname = "day15/input.txt"
 
 riskMap = parse.(Int, hcat( split.(readlines(fname),"")... ) )
-riskMap = hcat( riskMap, riskMap )
+# riskMap = hcat( riskMap, riskMap )
 xMax, yMax = size(riskMap)
 
 ########################
@@ -21,7 +21,7 @@ end
 
 # Get shortest path
 shortestPath = enumerate_paths(
-    dijkstra_shortest_paths(graphRisk, 1), 100
+    dijkstra_shortest_paths(graphRisk, 1), xMax*yMax
 )
 result = sum(riskMap[shortestPath]) - riskMap[1]
 println(result)
